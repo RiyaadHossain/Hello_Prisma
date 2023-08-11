@@ -11,9 +11,48 @@ datasource db {
 }
 
 model User {
-  id          Int    @id @default(autoincrement())
-  email       String @unique
-  name        String
-  age         Int
-  phoneNumber String? @default("017")
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  role      String
+  posts     Post[]
+  profile   Profile?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Profile {
+  id        Int      @id @default(autoincrement())
+  bio       String
+  userId    Int      @unique // One(Profile) to One(User)
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("profiles")
+}
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  name      String
+  postId    Int
+  posts     Post[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("categories")
+}
+
+model Post {
+  id         Int      @id @default(autoincrement())
+  title      String
+  authorId   Int
+  author     User     @relation(fields: [authorId], references: [id])
+  categoryId Int // One(Post) to Many(Category)
+  category   Category @relation(fields: [categoryId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("posts")
 }
