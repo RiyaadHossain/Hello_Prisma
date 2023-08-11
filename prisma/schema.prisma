@@ -11,35 +11,29 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  role      String
-  posts     Post[]
-  profile   Profile?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id      Int      @id @default(autoincrement())
+  email   String   @unique
+  role    String
+  posts   Post[]
+  profile Profile?
 
   @@map("users")
 }
 
 model Profile {
-  id        Int      @id @default(autoincrement())
-  bio       String
-  userId    Int      @unique // One(Profile) to One(User)
-  user      User     @relation(fields: [userId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id     Int    @id @default(autoincrement())
+  bio    String
+
+  userId Int    @unique // One(Profile) to One(User)
+  user   User   @relation(fields: [userId], references: [id])
 
   @@map("profiles")
 }
 
 model Category {
-  id        Int      @id @default(autoincrement())
-  name      String
-  postId    Int
-  posts     Post[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id     Int    @id @default(autoincrement())
+  name   String
+  posts  Post[]
 
   @@map("categories")
 }
@@ -47,12 +41,16 @@ model Category {
 model Post {
   id         Int      @id @default(autoincrement())
   title      String
-  authorId   Int
+
+  authorId   Int // One(Post) to Many(User)
   author     User     @relation(fields: [authorId], references: [id])
+
   categoryId Int // One(Post) to Many(Category)
   category   Category @relation(fields: [categoryId], references: [id])
+
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
   @@map("posts")
 }
+
