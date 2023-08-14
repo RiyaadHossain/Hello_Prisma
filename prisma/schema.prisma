@@ -21,36 +21,36 @@ model User {
 }
 
 model Profile {
-  id     Int    @id @default(autoincrement())
-  bio    String
+  id  Int    @id @default(autoincrement())
+  bio String
 
-  userId Int    @unique // One(Profile) to One(User)
-  user   User   @relation(fields: [userId], references: [id])
+  userId Int  @unique // One(Profile) to One(User)
+  user   User @relation(fields: [userId], references: [id])
 
   @@map("profiles")
 }
 
 model Category {
-  id     Int    @id @default(autoincrement())
-  name   String
-  posts  Post[]
+  id    Int    @id @default(autoincrement())
+  name  String
+  posts Post[]
 
   @@map("categories")
 }
 
 model Post {
-  id         Int      @id @default(autoincrement())
-  title      String
+  id    Int    @id @default(autoincrement())
+  title String
 
-  authorId   Int // One(Post) to Many(User)
-  author     User     @relation(fields: [authorId], references: [id])
+  authorId Int // One(Post) to Many(User)
 
   categoryId Int // One(Post) to Many(Category)
-  category   Category @relation(fields: [categoryId], references: [id])
 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  author   User     @relation(fields: [authorId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
 
   @@map("posts")
 }
-

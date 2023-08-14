@@ -41,6 +41,7 @@ const createUser: RequestHandler = async (req, res) => {
       data: result,
     });
   } catch (error) {
+    console.log(error);
     res.status(400).send(error);
   }
 };
